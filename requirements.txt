@@ -1,0 +1,8 @@
+numpy
+tensorflow
+opencv-python
+mtcnn
+ipykernel
+matplotlib
+ultralytics
+easyocr
