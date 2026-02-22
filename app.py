@@ -100,7 +100,7 @@ def task_cloaking():
     print("Generating Cloak... (This may take a moment)")
     cloaked_face = cloaker.generate_cloak(
         input_path=input_path,
-        iterations=2000,
+        iterations=200,
         lr=0.005,
         epsilon=0.05
     )
