@@ -91,7 +91,7 @@ class AegisCloakingEngine:
 
     def generate_cloak(self, input_path, manual_target_path=None, iterations=1000, lr=0.005, epsilon=0.05):
         """
-        Step 2: Computing Per-image Cloaks[cite: 259].
+        Step 2: Computing Per-image Cloaks
         
         Args:
             iterations: Paper suggests 1000 iterations.
