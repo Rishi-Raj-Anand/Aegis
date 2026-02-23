@@ -9,8 +9,14 @@ from Aegis.FaceRedactor import FaceRedactor
 from Aegis.TextRedactor import TextRedactor
 
 # Global Configuration
-TARGET_POOL = "targets/"
+TARGET_POOL = "assets/targets/"
 
+def preview_and_save(input_path,result,F):
+    print("Displaying comparison...")
+    show_comparison(input_path, result)
+    
+    print("Saving result...")
+    save_image(result,F)
 
 def get_image_path_from_user():
     """Helper to get a valid image path from the user."""
@@ -20,11 +26,9 @@ def get_image_path_from_user():
             return path
         print("❌ Error: File not found. Please try again.")
 
-def task_redact_faces():
+def task_redact_faces(input_path):
     """Redacting Faces"""
-    print("\n--- FACE REDACTION ENGINE ---")
-    input_path = get_image_path_from_user()
-    
+    print("\n--- FACE REDACTION ENGINE ---")    
     redactor = FaceRedactor()
     
     # Load and Detect
@@ -51,17 +55,14 @@ def task_redact_faces():
 
     # Apply and Save
     result = redactor.apply_redaction(img, boxes, to_blur)
-    
-    print("Displaying comparison...")
-    show_comparison(input_path, result)
-    
-    print("Saving result...")
-    save_image(result)
 
-def task_redact_pii():
+    return result
+    
+
+
+def task_redact_pii(input_path):
     """Redacting PII (Text)"""
     print("\n--- PII REDACTION ENGINE ---")
-    input_path = get_image_path_from_user()
     
     t_redactor = TextRedactor()
     
@@ -81,16 +82,11 @@ def task_redact_pii():
     # Apply Auto Redaction
     result = t_redactor.auto_redact(img, text_detections)
     
-    print("Displaying comparison...")
-    show_comparison(input_path, result)
-    
-    print("Saving result...")
-    save_image(result)
+    return result
 
-def task_cloaking():
+def task_cloaking(input_path):
     """Cloaking Image"""
     print("\n--- AI CLOAKING ENGINE ---")
-    input_path = get_image_path_from_user()
     
     # Initialize Engine
     print("Initializing Aegis Cloaking Engine (Loading Models)...")
@@ -105,11 +101,7 @@ def task_cloaking():
         epsilon=0.05
     )
     
-    print("Displaying comparison...")
-    show_comparison(input_path, cloaked_face)
-    
-    print("Saving result...")
-    save_image(cloaked_face)
+    return cloaked_face
 
 def main():
     """Main Application Loop"""
@@ -126,11 +118,17 @@ def main():
         choice = input("Select an option (1-4): ").strip()
         
         if choice == '1':
-            task_redact_faces()
+            input_path = get_image_path_from_user()
+            final_image=task_redact_faces(input_path)
+            preview_and_save(input_path,final_image,"F")
         elif choice == '2':
-            task_redact_pii()
+            input_path = get_image_path_from_user()
+            final_image=task_redact_pii(input_path)
+            preview_and_save(input_path,final_image,"P")
         elif choice == '3':
-            task_cloaking()
+            input_path = get_image_path_from_user()
+            final_image=task_cloaking(input_path)
+            preview_and_save(input_path,final_image,"C")
         elif choice == '4':
             print("\nExiting Aegis...")
             break
